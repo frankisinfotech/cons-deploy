@@ -1,0 +1,45 @@
+name: Fortify Scan
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  fortify-scan:
+    runs-on: [self-hosted, fortify]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Fortify Scan
+        run: |
+          # Run Fortify scan
+          sourceanalyzer -b frontend-build -clean
+          sourceanalyzer -b frontend-build . -scan -f results.fpr
+
+      - name: Generate Fortify Report
+        run: |
+          # Generate report in PDF format
+          ReportGenerator -format pdf -f results.fpr -out results.pdf
+
+      - name: Attach Report to Issue
+        if: ${{ github.event_name == 'push' && contains(github.ref, 'develop') }}
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Fortify Scan Report - ${{ github.sha }}
+          body: |
+            The Fortify scan has been completed for commit ${{ github.sha }}.
+            The report is attached below.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
