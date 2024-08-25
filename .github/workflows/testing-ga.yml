@@ -39,5 +39,5 @@ jobs:
         run: | 
           sudo apt install apache2 -y
           sudo apt install maven -y
-          systemctl enable apache2
+          sudo systemctl enable apache2
 
