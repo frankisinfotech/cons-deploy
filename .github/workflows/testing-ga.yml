@@ -21,7 +21,23 @@ jobs:
       steps:
 
       - name: ListRootDirectory
-        run: ls -l
+        run: ls -l /
 
       - name: ListEnvs
         run: printenv
+
+   packageInstall:
+      runs-on: ubuntu-latest
+      needs: filemanipulate
+      
+      steps:
+
+      - name: Update Package Repo
+        run: apt update
+
+      - name: Install Apache
+        run: | 
+          apt install apache2 -y
+          apt install maven -y
+          systemctl enable apache2
+
