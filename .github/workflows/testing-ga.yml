@@ -33,11 +33,11 @@ jobs:
       steps:
 
       - name: Update Package Repo
-        run: apt update
+        run: sudo apt update
 
       - name: Install Apache
         run: | 
-          apt install apache2 -y
-          apt install maven -y
+          sudo apt install apache2 -y
+          sudo apt install maven -y
           systemctl enable apache2
 
