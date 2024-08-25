@@ -1,0 +1,25 @@
+name: testing-ga
+
+on: workflow_dispatch
+
+jobs:
+
+   testing:
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: Get Git Version
+        run: git version
+
+      - name: Get Nodejs Version
+        run: node version
+
+   filemanipulate:
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: ListRootDirectory
+        run: ls -l
+
+      - name: ListEnvs
+        run: printenv
