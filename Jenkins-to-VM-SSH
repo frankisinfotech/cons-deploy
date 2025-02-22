@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    
+    stages {
+        
+        
+        stage ('Deploy to Instance') {
+            steps {
+                sshagent(['github-access']) {
+                    
+                    script {
+                         sh '''
+                         ssh ec2-user@18.202.243.10 <<EOF
+                         
+                         sudo yum install git maven docker -y 
+                         sudo systemctl restart docker
+                         
+                         sudo docker run -d --name apachecon -p 80:80 httpd
+                         curl ident.me
+                         
+EOF
+                         
+                         '''
+                    }
+            }
+        }
+    }
+   }
+}
